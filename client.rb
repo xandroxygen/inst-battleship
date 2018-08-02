@@ -3,7 +3,7 @@
 require "json"
 require "net/http"
 require "optparse"
-require "./targeters/dumb.rb"
+require "./targeters/simple_tracker.rb"
 require "./placers/dumb.rb"
 
 def create_game(client)
@@ -52,7 +52,10 @@ def print_board(game)
   #   puts "\n"
   # end
   # puts "* * *\n\n"
-  p game
+  puts "  " + ('A'..'J').to_a.join("")
+  (0..9).each do |row|
+    puts row.to_s + " " + game["board"][row].join("")
+  end
 end
 
 http_client = Net::HTTP.new("battleship.inseng.net", 80)
