@@ -42,8 +42,36 @@ class Board
     end
   end
 
+  def self.each_spiral_cell
+    yield [4,4]
+    (4..5).each { |i| yield [i,5] }
+    (3..4).each { |i| yield [5,i] }
+    (3..4).each { |i| yield [i,3] }
+    (4..6).each { |i| yield [3,i] }
+    (4..6).each { |i| yield [i,6] }
+    (2..5).each { |i| yield [6,i] }
+    (2..5).each { |i| yield [i,2] }
+    (3..7).each { |i| yield [2,i] }
+    (3..7).each { |i| yield [i,7] }
+    (1..6).each { |i| yield [7,i] }
+    (1..6).each { |i| yield [i,1] }
+    (2..8).each { |i| yield [1,i] }
+    (2..8).each { |i| yield [i,8] }
+    (0..7).each { |i| yield [8,i] }
+    (0..7).each { |i| yield [i,0] }
+    (1..9).each { |i| yield [0,i] }
+    (1..9).each { |i| yield [i,9] }
+    (0..8).each { |i| yield [9,i] }
+  end
+
   def self.each_diagonal_cell(white)
     each_cell do |cell|
+      yield cell if cell.sum % 2 == (white ? 0 : 1)
+    end
+  end
+
+  def self.each_spiral_diagonal_cell(white)
+    each_spiral_cell do |cell|
       yield cell if cell.sum % 2 == (white ? 0 : 1)
     end
   end
@@ -62,6 +90,12 @@ class Board
 
   def each_diagonal_blank(white = false)
     Board.each_diagonal_cell(white) do |cell|
+      yield cell if blank_at? cell
+    end
+  end
+
+  def each_spiral_diagonal_blank(white = false)
+    Board.each_spiral_diagonal_cell(white) do |cell|
       yield cell if blank_at? cell
     end
   end

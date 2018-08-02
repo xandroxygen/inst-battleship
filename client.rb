@@ -3,7 +3,7 @@
 require "json"
 require "net/http"
 require "optparse"
-require "./targeters/diagonal_tracker.rb"
+require "./targeters/spiral_tracker.rb"
 require "./placers/quadrant.rb"
 require "./lib/board.rb"
 
