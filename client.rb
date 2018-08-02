@@ -3,7 +3,8 @@
 require "json"
 require "net/http"
 require "optparse"
-require "./brain.rb"
+require "./targeters/dumb.rb"
+require "./placers/dumb.rb"
 
 def create_game(client)
   req = Net::HTTP::Post.new("/games", "Content-Type" => "application/json")
