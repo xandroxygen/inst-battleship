@@ -3,8 +3,8 @@
 require "json"
 require "net/http"
 require "optparse"
-require "./targeters/simple_tracker.rb"
-require "./placers/dumb.rb"
+require "./targeters/diagonal_tracker.rb"
+require "./placers/quadrant.rb"
 require "./lib/board.rb"
 
 def create_game(client)
@@ -24,7 +24,6 @@ def join_game(client, player_name, ships, game_id, auto)
   body = { name: player_name }.merge(ships)
   req.body = body.to_json
 
-  puts body
   JSON.parse(client.request(req).body)
 end
 

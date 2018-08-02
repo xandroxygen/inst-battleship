@@ -42,6 +42,12 @@ class Board
     end
   end
 
+  def self.each_diagonal_cell(white)
+    each_cell do |cell|
+      yield cell if cell.sum % 2 == (white ? 0 : 1)
+    end
+  end
+
   def each_hit
     Board.each_cell do |cell|
       yield cell if hit_at? cell
@@ -50,6 +56,12 @@ class Board
 
   def each_blank
     Board.each_cell do |cell|
+      yield cell if blank_at? cell
+    end
+  end
+
+  def each_diagonal_blank(white = false)
+    Board.each_diagonal_cell(white) do |cell|
       yield cell if blank_at? cell
     end
   end
