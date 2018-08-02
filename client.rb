@@ -5,6 +5,7 @@ require "net/http"
 require "optparse"
 require "./targeters/simple_tracker.rb"
 require "./placers/dumb.rb"
+require "./lib/board.rb"
 
 def create_game(client)
   req = Net::HTTP::Post.new("/games", "Content-Type" => "application/json")
@@ -36,28 +37,6 @@ def play(client, game_id, secret, position)
   JSON.parse(client.request(req).body)
 end
 
-def print_board(game)
-  # printed_boards = game["boards"].map do |board|
-  #   board["rows"].map do |row|
-  #     row.map { |cell| cell || "-" }.join(" ")
-  #   end
-  # end
-
-  # [0, 3, 6].each do |i|
-  #   (0..2).each do |j|
-  #     puts [printed_boards[i][j],
-  #           printed_boards[i+1][j],
-  #           printed_boards[i+2][j]].join("  ")
-  #   end
-  #   puts "\n"
-  # end
-  # puts "* * *\n\n"
-  puts "  " + ('A'..'J').to_a.join("")
-  (0..9).each do |row|
-    puts row.to_s + " " + game["board"][row].join("")
-  end
-end
-
 http_client = Net::HTTP.new("battleship.inseng.net", 80)
 options = {}
 
@@ -82,10 +61,11 @@ puts game_id
 ships = get_setup()
 game = join_game(http_client, player_name, ships, game_id, options[:auto])
 loop do
-  print_board(game)
+  board = Board.new(game["board"])
+  board.print
   break if game["winner"] != nil
 
-  position = get_move(game)
+  position = get_move(board)
   puts "New move: #{position}\n\n\n"
 
   game = play(http_client, game["id"], game["currentPlayer"]["token"], position)
